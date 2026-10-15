@@ -1,4 +1,4 @@
-
+from src.semantic_retriever import SemanticNoteRetriever
 from pathlib import Path
 
 import pandas as pd
@@ -36,6 +36,7 @@ def format_comparison(value, comparison_type):
 def generate_report(df, notes):
     results = []
 
+    semantic_retriever = SemanticNoteRetriever(notes)
     for _, row in df.iterrows():
         route = (
             f"{row['origin']}-{row['destination']}"
@@ -46,10 +47,10 @@ def generate_report(df, notes):
         reason = "No significant cost anomaly detected."
 
         if bool(row["potential_anomaly"]):
-            candidates = retrieve_notes(
-                route,
-                row["week_of"],
-                notes
+            candidates = semantic_retriever.search(
+                route=route,
+                week_of=row["week_of"],
+                top_k=len(notes)
             )
 
             matched_note_id, reason = (

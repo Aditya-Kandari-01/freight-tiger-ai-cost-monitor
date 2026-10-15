@@ -1,0 +1,22 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables
+.env
+.env.*
+
+# Testing cache
+.pytest_cache/
+
+# Editor files
+.vscode/
+
+# Hugging Face model cache (if stored locally)
+.cache/
+models/
