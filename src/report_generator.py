@@ -21,6 +21,17 @@ OUTPUT_COLUMNS = [
     "reason"
 ]
 
+def format_comparison(value, comparison_type):
+    if pd.isna(value):
+        return ""
+
+    if comparison_type == "history":
+        description = "vs this route's past average"
+    else:
+        description = "vs similar-length routes this week"
+
+    return f"{value:+.1f}% {description}"
+
 
 def generate_report(df, notes):
     results = []
@@ -58,16 +69,16 @@ def generate_report(df, notes):
             "cost_per_tonne_km": round(
                 row["cost_per_tonne_km"], 4
             ),
-            "vs_own_history": (
-                round(row["vs_own_history"], 2)
-                if pd.notna(row["vs_own_history"])
-                else None
+            
+            "vs_own_history": format_comparison(
+                row["vs_own_history"],
+                "history"
             ),
-            "vs_similar_routes": (
-                round(row["vs_similar_routes"], 2)
-                if pd.notna(row["vs_similar_routes"])
-                else None
+            "vs_similar_routes": format_comparison(
+                row["vs_similar_routes"],
+                "peers"
             ),
+
             "flagged": flagged,
             "matched_note_id": matched_note_id,
             "reason": reason
